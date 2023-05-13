@@ -12,14 +12,8 @@ public class SyslogSender {
 
 	public static void main(String[] args) throws Exception {
 
-//		selectTest("192.168.0.1", 10514);
+		selectTest("192.168.0.1", 10514);
 		badLoginTest("192.168.0.1", 10514);
-
-//		Faker faker = new Faker();
-//		System.out.println(faker.internet().domainWord());
-
-//		System.out.println(new SimpleDateFormat("MMM dd HH:mm:ss").format(new Date()));
-//		System.out.println(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(new Date()));
 
 	}
 
