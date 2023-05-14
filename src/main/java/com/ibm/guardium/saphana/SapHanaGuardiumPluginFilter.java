@@ -22,7 +22,6 @@ import java.util.concurrent.LinkedBlockingDeque;
 //class name must match plugin name
 @LogstashPlugin(name = "saphana_guardium_plugin_filter")
 public class SapHanaGuardiumPluginFilter implements Filter {
-
 	
 	public static final String LOG42_CONF = "log4j2uc.properties";
 
