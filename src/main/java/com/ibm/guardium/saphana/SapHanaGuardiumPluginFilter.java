@@ -23,12 +23,15 @@ import java.util.concurrent.LinkedBlockingDeque;
 @LogstashPlugin(name = "saphana_guardium_plugin_filter")
 public class SapHanaGuardiumPluginFilter implements Filter {
 
+	
 	public static final String LOG42_CONF = "log4j2uc.properties";
+
+	public static final String VERSION = "1.1";
 
 	static LinkedBlockingDeque<String> fingerprintDeque = new LinkedBlockingDeque<>(1000);
 
 	static {
-		System.out.println("SapHanaGuardiumPluginFilter version 1.1");
+		System.out.format("SapHanaGuardiumPluginFilter version %s%n", VERSION);
 		try {
 			String uc_etc = System.getenv("UC_ETC");
 			LoggerContext context = (LoggerContext) LogManager.getContext(false);
@@ -71,17 +74,21 @@ public class SapHanaGuardiumPluginFilter implements Filter {
 		for (Event e : events) {
 
 			// ahmedm2
-			if (e.getField(Constants.DEBUG_SHOW_DATA) != null && e.getField(Constants.DEBUG_SHOW_DATA).toString().equals("true")) {
+			if (e.getField(Constants.DEBUG_SHOW_DATA) != null
+					&& e.getField(Constants.DEBUG_SHOW_DATA).toString().equals("true")) {
 				System.out.format("Event Data: --------------------=> %s%n%n", e.getData());
 			}
-			if (e.getField(Constants.DEBUG_SHOW_EVENTS_PROCESSED_COUNT) != null && e.getField(Constants.DEBUG_SHOW_EVENTS_PROCESSED_COUNT).toString().equals("true")) {
+			if (e.getField(Constants.DEBUG_SHOW_EVENTS_PROCESSED_COUNT) != null
+					&& e.getField(Constants.DEBUG_SHOW_EVENTS_PROCESSED_COUNT).toString().equals("true")) {
 				debugEventEmittedCount = true;
 			}
 
-			if (e.getField(Constants.EXEC_STATEMENT) instanceof String || e.getField(Constants.ACTION_STATUS) instanceof String) {
+			if (e.getField(Constants.EXEC_STATEMENT) instanceof String
+					|| e.getField(Constants.ACTION_STATUS) instanceof String) {
 
 				// ahmedm2
-				// if (fingerprintDeque.contains(e.getField(Constants.FINGERPRINT).toString())) {
+				// if (fingerprintDeque.contains(e.getField(Constants.FINGERPRINT).toString()))
+				// {
 				if (fingerprintDeque.contains(e.getField(Constants.FINGERPRINT).toString())) {
 					e.tag("_guardium_skip_duplicate_records");
 				} else {
@@ -100,7 +107,8 @@ public class SapHanaGuardiumPluginFilter implements Filter {
 						e.setField(GuardConstants.GUARDIUM_RECORD_FIELD_NAME, gson.toJson(record));
 
 						// ahmedm2
-						if (e.getField(Constants.DEBUG_SHOW_OUTPUT_JSON) != null && e.getField(Constants.DEBUG_SHOW_OUTPUT_JSON).toString().equals("true")) {
+						if (e.getField(Constants.DEBUG_SHOW_OUTPUT_JSON) != null
+								&& e.getField(Constants.DEBUG_SHOW_OUTPUT_JSON).toString().equals("true")) {
 							System.out.format("Out JSON: --------------------=> %s%n%n", gson.toJson(record));
 						}
 						eventsEmitted++;
@@ -112,7 +120,8 @@ public class SapHanaGuardiumPluginFilter implements Filter {
 					}
 				}
 			} else {
-				log.error("SAPHANA filter: Event has been skipped: " + e.getField("message") + " originalSQL" + e.getField(Constants.EXEC_STATEMENT));
+				log.error("SAPHANA filter: Event has been skipped: " + e.getField("message") + " originalSQL"
+						+ e.getField(Constants.EXEC_STATEMENT));
 				e.tag("_guardium_skip_not_saphana");
 			}
 		}
@@ -197,5 +206,5 @@ public class SapHanaGuardiumPluginFilter implements Filter {
 	public String getId() {
 		return this.id;
 	}
-	
+
 }
