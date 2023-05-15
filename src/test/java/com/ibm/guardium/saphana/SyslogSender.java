@@ -13,7 +13,7 @@ public class SyslogSender {
 	public static void main(String[] args) throws Exception {
 
 		selectTest("192.168.0.1", 10514);
-		badLoginTest("192.168.0.1", 10514);
+//		badLoginTest("192.168.0.1", 10514);
 
 	}
 
@@ -30,16 +30,17 @@ public class SyslogSender {
 		String sourceProgram = "SOURCE_PROGRAM_2";
 		String osUser = "ahmed";
 		String sql = String.format("SELECT * FROM %s", faker.internet().domainWord());
+		String clientIp=faker.internet().privateIpV4Address();
 
 		// Sending connect message
 		sendSyslogTcp(host, port, String.format(
-				"<86>%s redhat79 %s[17804]: %s;indexserver;redhat79;HXE;90;39003;HXE;10.0.0.3;DESKTOP-4NAPAOI;%d;%d;Guardium_Connect;INFO;CONNECT;%s;;;;;;SYSTEM;SUCCESSFUL;;;;;;;;%s;%s;;;;;SYSTEM;%s;SYSTEM;;;;;;;;;;;;;;",
-				dateTime, program, isoDate, clientProcessId, clientPort, activeUser, sessionId, osUser, sourceProgram));
+				"<86>%s redhat79 %s[17804]: %s;indexserver;redhat79;HXE;90;39003;HXE;%s;DESKTOP-4NAPAOI;%d;%d;Guardium_Connect;INFO;CONNECT;%s;;;;;;SYSTEM;SUCCESSFUL;;;;;;;;%s;%s;;;;;SYSTEM;%s;SYSTEM;;;;;;;;;;;;;;",
+				dateTime, program, isoDate, clientIp, clientProcessId, clientPort, activeUser, sessionId, osUser, sourceProgram));
 
 		// Sending select message
 		sendSyslogTcp(host, port, String.format(
-				"<86>%s redhat79 %s[17804]: %s;indexserver;redhat79;HXE;90;39003;HXE;192.168.0.1;DESKTOP-4NAPAOI;%d;%d;GUARDIUM_POLICY;INFO;SELECT;%s;SYSTEM;PERSONS;;;;;SUCCESSFUL;;;;;;;%s;%s;%s;;;;;SYSTEM;%s;SYSTEM;;;;;;;;;;;;;;",
-				dateTime, program, isoDate, clientProcessId, clientPort, activeUser, sql, sessionId, osUser,
+				"<86>%s redhat79 %s[17804]: %s;indexserver;redhat79;HXE;90;39003;HXE;%s;DESKTOP-4NAPAOI;%d;%d;GUARDIUM_POLICY;INFO;SELECT;%s;SYSTEM;PERSONS;;;;;SUCCESSFUL;;;;;;;%s;%s;%s;;;;;SYSTEM;%s;SYSTEM;;;;;;;;;;;;;;",
+				dateTime, program, isoDate, clientIp, clientProcessId, clientPort, activeUser, sql, sessionId, osUser,
 				sourceProgram));
 
 	}
@@ -57,9 +58,11 @@ public class SyslogSender {
 		String sourceProgram = "SOURCE_PROGRAM_2";
 		String osUser = "ahmed";
 		String exceptionType = "CONNECT";
+		String clientIp=faker.internet().privateIpV4Address();
+		
 		sendSyslogTcp(host, port, String.format(
-				"<86>%s redhat79 %s[1886]: %s;indexserver;redhat79;HXE;90;39003;HXE;192.168.0.1;DESKTOP-4NAPAOI;%d;%d;GUARDIUM_POLICY2;INFO;%s;;;;;;;%s;UNSUCCESSFUL;;;;;;authentication failed;;%d;%s;;;;;;%s;;;;;;;;;;;;;;;",
-				dateTime, program, isoDate, clientProcessId, clientPort, exceptionType, activeUser, sessionId, osUser,
+				"<86>%s redhat79 %s[1886]: %s;indexserver;redhat79;HXE;90;39003;HXE;%s;DESKTOP-4NAPAOI;%d;%d;GUARDIUM_POLICY2;INFO;%s;;;;;;;%s;UNSUCCESSFUL;;;;;;authentication failed;;%d;%s;;;;;;%s;;;;;;;;;;;;;;;",
+				dateTime, program, isoDate, clientIp, clientProcessId, clientPort, exceptionType, activeUser, sessionId, osUser,
 				sourceProgram));
 	}
 
